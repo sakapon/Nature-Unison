@@ -7,7 +7,6 @@ namespace NatureUnison.Leap
     {
         public event Action<Frame> FrameUpdated = f => { };
         public event Action<bool> ConnectionChanged = b => { };
-        public event Action<bool> FocusChanged = b => { };
 
         public override void OnFrame(Controller controller)
         {
@@ -25,16 +24,6 @@ namespace NatureUnison.Leap
         public override void OnDisconnect(Controller controller)
         {
             ConnectionChanged(false);
-        }
-
-        public override void OnFocusGained(Controller controller)
-        {
-            FocusChanged(true);
-        }
-
-        public override void OnFocusLost(Controller controller)
-        {
-            FocusChanged(false);
         }
     }
 }

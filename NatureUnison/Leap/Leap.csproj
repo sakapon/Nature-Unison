@@ -41,6 +41,9 @@
     <AssemblyOriginatorKeyFile>NatureUnison.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KLibrary.ComponentModel">
+      <HintPath>..\packages\KLibrary.ComponentModel.2.1.57.0\lib\net45\KLibrary.ComponentModel.dll</HintPath>
+    </Reference>
     <Reference Include="LeapCSharp.NET4.0">
       <HintPath>..\Lib\LeapCSharp.NET4.0.dll</HintPath>
     </Reference>

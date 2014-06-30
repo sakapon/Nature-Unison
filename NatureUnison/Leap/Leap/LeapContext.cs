@@ -1,10 +1,11 @@
-﻿using Leap;
+﻿using KLibrary.ComponentModel;
+using Leap;
 using System;
 using System.Windows.Media.Media3D;
 
 namespace NatureUnison.Leap
 {
-    public class LeapContext : IDisposable
+    public class LeapContext : NotifyBase, IDisposable
     {
         public static LeapContext Current { get; private set; }
 
@@ -17,15 +18,16 @@ namespace NatureUnison.Leap
             };
         }
 
-        bool allowBackground;
         public bool AllowBackground
         {
-            get { return allowBackground; }
-            set
-            {
-                allowBackground = value;
-                controller.SetPolicyFlags(allowBackground ? Controller.PolicyFlag.POLICYBACKGROUNDFRAMES : Controller.PolicyFlag.POLICYDEFAULT);
-            }
+            get { return GetValue<bool>(); }
+            set { SetValue(value); }
+        }
+
+        public bool IsConnected
+        {
+            get { return GetValue<bool>(); }
+            set { SetValue(value); }
         }
 
         public LeapSettings Settings { get; private set; }
@@ -45,8 +47,13 @@ namespace NatureUnison.Leap
 
             controller = new Controller();
             listener = new FrameListener();
+            listener.ConnectionChanged += b => IsConnected = b;
             controller.AddListener(listener);
 
+            AddPropertyChangedHandler("AllowBackground", () =>
+            {
+                controller.SetPolicyFlags(AllowBackground ? Controller.PolicyFlag.POLICYBACKGROUNDFRAMES : Controller.PolicyFlag.POLICYDEFAULT);
+            });
             AllowBackground = true;
         }
 
