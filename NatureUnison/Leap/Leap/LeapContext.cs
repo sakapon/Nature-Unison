@@ -89,6 +89,7 @@ namespace NatureUnison.Leap
         public double AngleDegrees { get; set; }
         public double PixelsPerMillimeter { get; set; }
 
+        // TODO: .config file.
         public LeapSettings()
         {
             ScreenCenter = new Vector3D(0, 300, 0);

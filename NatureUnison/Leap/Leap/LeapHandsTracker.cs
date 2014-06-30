@@ -32,6 +32,7 @@ namespace NatureUnison.Leap
             {
                 handId = h.Id;
 
+                // TODO: 正常な座標とは限りません。
                 var hand = new HandFrame
                 {
                     PalmPosition = h.StabilizedPalmPosition.ToPoint3D().ToScreenPosition(),

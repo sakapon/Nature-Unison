@@ -43,6 +43,34 @@ namespace NatureUnison
         {
             SingleHandFrame(f);
         }
+
+        public event Action<double?> TwoFingersDistance = f => { };
+
+        public HandsContext()
+        {
+            SingleHandFrame += f =>
+            {
+                if (!f.HasValue)
+                {
+                    TwoFingersDistance(null);
+                    return;
+                }
+
+                var frontFingers = f.Value.Fingers
+                    .Where(_f => !double.IsNaN(_f.TipPosition.Z))
+                    .OrderByDescending(_f => _f.TipPosition.Z)
+                    .Take(2)
+                    .ToArray();
+                if (frontFingers.Length != 2)
+                {
+                    TwoFingersDistance(null);
+                    return;
+                }
+
+                var d = (frontFingers[0].TipPosition - frontFingers[1].TipPosition).Length;
+                TwoFingersDistance(d);
+            };
+        }
     }
 
     public struct HandFrame
