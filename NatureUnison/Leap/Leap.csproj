@@ -63,6 +63,8 @@
     </Compile>
     <Compile Include="Leap\FrameListener.cs" />
     <Compile Include="Leap\LeapContext.cs" />
+    <Compile Include="Leap\LeapHandsTracker.cs" />
+    <Compile Include="Leap\LeapHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

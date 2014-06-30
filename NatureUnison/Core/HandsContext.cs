@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Media3D;
 
 namespace NatureUnison
 {
@@ -11,13 +12,6 @@ namespace NatureUnison
         static HandsContext()
         {
             Current = new HandsContext();
-        }
-
-        public event Action<HandFrame?> SingleHandFrame = f => { };
-
-        internal void NotifySingleHandFrame(HandFrame? f)
-        {
-            SingleHandFrame(f);
         }
 
         HashSet<HandsTracker> trackers = new HashSet<HandsTracker>();
@@ -42,10 +36,23 @@ namespace NatureUnison
             trackers.Remove(tracker);
             tracker.Context = null;
         }
+
+        public event Action<HandFrame?> SingleHandFrame = f => { };
+
+        internal void NotifySingleHandFrame(HandFrame? f)
+        {
+            SingleHandFrame(f);
+        }
     }
 
     public struct HandFrame
     {
+        public Point3D? PalmPosition;
+        public FingerFrame[] Fingers;
+    }
 
+    public struct FingerFrame
+    {
+        public Point3D? TipPosition;
     }
 }
