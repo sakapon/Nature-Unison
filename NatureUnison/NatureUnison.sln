@@ -42,4 +42,8 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_AssemblyInfoFilename = Properties\SharedAssemblyInfo.cs
+	EndGlobalSection
 EndGlobal
