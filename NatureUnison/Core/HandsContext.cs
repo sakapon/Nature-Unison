@@ -47,12 +47,13 @@ namespace NatureUnison
 
     public struct HandFrame
     {
-        public Point3D? PalmPosition;
+        public Point3D PalmPosition;
         public FingerFrame[] Fingers;
+        public FingerFrame? FrontmostFinger;
     }
 
     public struct FingerFrame
     {
-        public Point3D? TipPosition;
+        public Point3D TipPosition;
     }
 }

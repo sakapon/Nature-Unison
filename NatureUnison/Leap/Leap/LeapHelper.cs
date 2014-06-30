@@ -41,5 +41,13 @@ namespace NatureUnison.Leap
         {
             return new Point3D(Math.Floor(p.X), Math.Floor(p.Y), Math.Floor(p.Z));
         }
+
+        internal static FingerFrame ToFingerFrame(this Pointable p)
+        {
+            return new FingerFrame
+            {
+                TipPosition = p.StabilizedTipPosition.ToPoint3D().ToScreenPosition(),
+            };
+        }
     }
 }
