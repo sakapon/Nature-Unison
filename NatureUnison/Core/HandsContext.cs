@@ -44,7 +44,11 @@ namespace NatureUnison
             SingleHandFrame(f);
         }
 
-        public event Action<double?> TwoFingersDistance = f => { };
+        public event Action<HandFrame?, double?> TwoFingersDistance = (f, d) => { };
+        public event Action<HandFrame?, bool> PinchReported = (f, b) => { };
+        //public event Action<HandFrame?, bool> PinchChanged = (f, b) => { };
+
+        const double MaxPinchDistance = 200;
 
         public HandsContext()
         {
@@ -52,7 +56,7 @@ namespace NatureUnison
             {
                 if (!f.HasValue)
                 {
-                    TwoFingersDistance(null);
+                    TwoFingersDistance(f, null);
                     return;
                 }
 
@@ -63,13 +67,44 @@ namespace NatureUnison
                     .ToArray();
                 if (frontFingers.Length != 2)
                 {
-                    TwoFingersDistance(null);
+                    TwoFingersDistance(f, null);
                     return;
                 }
 
                 var d = (frontFingers[0].TipPosition - frontFingers[1].TipPosition).Length;
-                TwoFingersDistance(d);
+                TwoFingersDistance(f, d);
             };
+
+            var distanceState = PinchDistanceState.Unknown;
+            var isPinched = false;
+            TwoFingersDistance += (f, d) =>
+            {
+                var distanceState_old = distanceState;
+                distanceState = ToPinchDistanceState(d);
+
+                if (distanceState_old == PinchDistanceState.InRange && distanceState == PinchDistanceState.Unknown && f.HasValue)
+                {
+                    isPinched = true;
+                }
+                else if (isPinched && (distanceState != PinchDistanceState.Unknown || !f.HasValue))
+                {
+                    isPinched = false;
+                }
+
+                PinchReported(f, isPinched);
+            };
+        }
+
+        static readonly Func<double?, PinchDistanceState> ToPinchDistanceState = d =>
+            !d.HasValue ? PinchDistanceState.Unknown :
+            d.Value < MaxPinchDistance ? PinchDistanceState.InRange :
+            PinchDistanceState.OutOfRange;
+
+        enum PinchDistanceState
+        {
+            Unknown,
+            InRange,
+            OutOfRange,
         }
     }
 
