@@ -48,6 +48,10 @@ namespace NatureUnison
         public event Action<HandFrame?, bool> PinchReported = (f, b) => { };
         //public event Action<HandFrame?, bool> PinchChanged = (f, b) => { };
 
+        public event Action<HandFrame?> DragStarted = f => { };
+        public event Action<HandFrame?, Vector3D> Dragged = (f, v) => { };
+        public event Action<HandFrame?, Vector3D?> Dropped = (f, v) => { };
+
         const double MaxPinchDistance = 200;
 
         public HandsContext()
@@ -92,6 +96,34 @@ namespace NatureUnison
                 }
 
                 PinchReported(f, isPinched);
+            };
+
+            var dragStartedFrame = default(HandFrame);
+            var isPinched2 = false;
+            PinchReported += (f, b) =>
+            {
+                var isPinched2_old = isPinched2;
+                isPinched2 = b;
+
+                if (isPinched2_old)
+                {
+                    if (isPinched2)
+                    {
+                        Dragged(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition);
+                    }
+                    else
+                    {
+                        Dropped(f, f.HasValue ? f.Value.PalmPosition - dragStartedFrame.PalmPosition : default(Vector3D?));
+                    }
+                }
+                else
+                {
+                    if (isPinched2)
+                    {
+                        dragStartedFrame = f.Value;
+                        DragStarted(f);
+                    }
+                }
             };
         }
 
