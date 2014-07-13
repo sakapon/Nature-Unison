@@ -82,6 +82,7 @@
   <ItemGroup>
     <None Include="NatureUnison.snk" />
     <None Include="packages.config" />
+    <None Include="pkg\tools\install.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

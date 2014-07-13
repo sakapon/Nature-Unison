@@ -13,8 +13,16 @@
     <releaseNotes>$releaseNotes$</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>$tags$</tags>
+    <dependencies>
+      <dependency id="KLibrary.ComponentModel" version="[2.1.57]" />
+    </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\*.*" target="lib\net45" />
+    <file src="bin\Release\NatureUnison.*.dll" target="lib\net45" />
+    <file src="bin\Release\NatureUnison.*.xml" target="lib\net45" />
+    <file src="bin\Release\LeapCSharp.NET4.0.dll" target="lib\net45" />
+    <file src="bin\Release\Leap.dll" target="content" />
+    <file src="bin\Release\LeapCSharp.dll" target="content" />
+    <file src="pkg\tools\*.*" target="tools" />
   </files>
 </package>
