@@ -27,7 +27,7 @@ namespace NatureUnison.Leap
         public bool IsConnected
         {
             get { return GetValue<bool>(); }
-            set { SetValue(value); }
+            private set { SetValue(value); }
         }
 
         public LeapSettings Settings { get; private set; }

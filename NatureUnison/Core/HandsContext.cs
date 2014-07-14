@@ -79,18 +79,17 @@ namespace NatureUnison
                 TwoFingersDistance(f, d);
             };
 
-            var distanceState = PinchDistanceState.Unknown;
+            var distanceState = new ShortValueHistory<PinchDistanceState>(PinchDistanceState.Unknown);
             var isPinched = false;
             TwoFingersDistance += (f, d) =>
             {
-                var distanceState_old = distanceState;
-                distanceState = ToPinchDistanceState(d);
+                distanceState.UpdateValue(ToPinchDistanceState(d));
 
-                if (distanceState_old == PinchDistanceState.InRange && distanceState == PinchDistanceState.Unknown && f.HasValue)
+                if (distanceState.Previous == PinchDistanceState.InRange && distanceState.Current == PinchDistanceState.Unknown && f.HasValue)
                 {
                     isPinched = true;
                 }
-                else if (isPinched && (distanceState != PinchDistanceState.Unknown || !f.HasValue))
+                else if (isPinched && (distanceState.Current != PinchDistanceState.Unknown || !f.HasValue))
                 {
                     isPinched = false;
                 }
@@ -99,15 +98,14 @@ namespace NatureUnison
             };
 
             var dragStartedFrame = default(HandFrame);
-            var isPinched2 = false;
+            var isPinched2 = new ShortValueHistory<bool>(false);
             PinchReported += (f, b) =>
             {
-                var isPinched2_old = isPinched2;
-                isPinched2 = b;
+                isPinched2.UpdateValue(b);
 
-                if (isPinched2_old)
+                if (isPinched2.Previous)
                 {
-                    if (isPinched2)
+                    if (isPinched2.Current)
                     {
                         Dragged(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition);
                     }
@@ -118,7 +116,7 @@ namespace NatureUnison
                 }
                 else
                 {
-                    if (isPinched2)
+                    if (isPinched2.Current)
                     {
                         dragStartedFrame = f.Value;
                         DragStarted(f);
