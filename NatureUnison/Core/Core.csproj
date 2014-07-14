@@ -58,6 +58,7 @@
     <Compile Include="HandsContext.cs" />
     <Compile Include="HandsTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueHistory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NuGetPackup.exe" />
