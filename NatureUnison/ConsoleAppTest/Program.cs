@@ -45,7 +45,8 @@ namespace ConsoleAppTest
 
         static void DistanceTest()
         {
-            HandsContext.Current.TwoFingersDistance += (f, d) =>
+            var gesture = new FingerGesture();
+            gesture.TwoFingersDistance += (f, d) =>
             {
                 if (d.HasValue)
                 {
@@ -56,7 +57,8 @@ namespace ConsoleAppTest
 
         static void PinchReportedTest()
         {
-            HandsContext.Current.PinchReported += (f, b) =>
+            var gesture = new FingerGesture();
+            gesture.PinchReported += (f, b) =>
             {
                 if (b)
                 {
@@ -67,15 +69,16 @@ namespace ConsoleAppTest
 
         static void DragTest()
         {
-            HandsContext.Current.DragStarted += f =>
+            var gesture = new FingerGesture();
+            gesture.DragStarted += f =>
             {
                 Console.WriteLine("Drag Started");
             };
-            HandsContext.Current.Dragged += (f, v) =>
+            gesture.Dragged += (f, v) =>
             {
                 Console.WriteLine(v);
             };
-            HandsContext.Current.Dropped += (f, v) =>
+            gesture.Dropped += (f, v) =>
             {
                 Console.WriteLine(v.HasValue ? v.Value.ToString() : "Not Tracked");
                 Console.WriteLine("Dropped");

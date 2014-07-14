@@ -55,6 +55,8 @@
     <Compile Include="..\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="FingerGesture.cs" />
+    <Compile Include="HandGesture.cs" />
     <Compile Include="HandsContext.cs" />
     <Compile Include="HandsTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
