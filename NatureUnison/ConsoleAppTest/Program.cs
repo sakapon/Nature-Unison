@@ -16,7 +16,9 @@ namespace ConsoleAppTest
             //SingleHandFrameTest();
             //DistanceTest();
             //PinchReportedTest();
-            DragTest();
+            //FingerDragTest();
+            //GripReportedTest();
+            HandDragTest();
 
             HandsContext.Current.AddTracker(new LeapHandsTracker());
 
@@ -67,12 +69,12 @@ namespace ConsoleAppTest
             };
         }
 
-        static void DragTest()
+        static void FingerDragTest()
         {
             var gesture = new FingerGesture();
             gesture.DragStarted += f =>
             {
-                Console.WriteLine("Drag Started");
+                Console.WriteLine("Finger Drag Started");
             };
             gesture.Dragged += (f, v) =>
             {
@@ -81,7 +83,37 @@ namespace ConsoleAppTest
             gesture.Dropped += (f, v) =>
             {
                 Console.WriteLine(v.HasValue ? v.Value.ToString() : "Not Tracked");
-                Console.WriteLine("Dropped");
+                Console.WriteLine("Finger Dropped");
+            };
+        }
+
+        static void GripReportedTest()
+        {
+            var gesture = new HandGesture();
+            gesture.GripReported += (f, b) =>
+            {
+                if (b)
+                {
+                    Console.WriteLine("Gripped {0:HH:mm:ss.fff}", DateTime.Now);
+                }
+            };
+        }
+
+        static void HandDragTest()
+        {
+            var gesture = new HandGesture();
+            gesture.DragStarted += f =>
+            {
+                Console.WriteLine("Hand Drag Started");
+            };
+            gesture.Dragged += (f, v) =>
+            {
+                Console.WriteLine(v);
+            };
+            gesture.Dropped += (f, v) =>
+            {
+                Console.WriteLine(v.HasValue ? v.Value.ToString() : "Not Tracked");
+                Console.WriteLine("Hand Dropped");
             };
         }
     }
