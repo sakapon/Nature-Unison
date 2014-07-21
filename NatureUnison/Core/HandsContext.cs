@@ -48,6 +48,8 @@ namespace NatureUnison
     public struct HandFrame
     {
         public Point3D PalmPosition;
+        public Vector3D PalmDirection;
+        public Vector3D Direction;
         public FingerFrame[] Fingers;
         public FingerFrame? FrontmostFinger;
     }
@@ -55,5 +57,6 @@ namespace NatureUnison
     public struct FingerFrame
     {
         public Point3D TipPosition;
+        public Vector3D Direction;
     }
 }
