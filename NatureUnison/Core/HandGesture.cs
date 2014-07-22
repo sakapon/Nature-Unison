@@ -96,7 +96,7 @@ namespace NatureUnison
 
             HandsContext.Current.SingleHandFrame += f =>
             {
-                HoldUpReported(f, f.HasValue && IsHandUpward(f.Value) && IsPalmForward(f.Value));
+                HoldUpReported(f, f.HasValue && f.Value.Fingers.Length >= 4 && IsHandUpward(f.Value) && IsPalmForward(f.Value));
             };
 
             var isHeldUp = new ShortValueHistory<bool>(false);
