@@ -170,17 +170,17 @@ namespace NatureUnison
         static bool IsHandUpward(HandFrame h)
         {
             // Map to plane x = 0 and determine if being in (135, 225) in degrees on y-z system.
-            var handDirection = h.Direction;
-            var handDirectionTan = handDirection.Z / handDirection.Y;
-            return handDirection.Y < 0 && -1 < handDirectionTan && handDirectionTan < 1;
+            var d = h.Direction;
+            var dTan = d.Z / d.Y;
+            return d.Y < 0 && -1 < dTan && dTan < 1;
         }
 
         static bool IsPalmForward(HandFrame h)
         {
             // Map to plane x = 0 and determine if being in (225, 315) in degrees on y-z system.
-            var palmDirection = h.PalmDirection;
-            var palmDirectionTan = palmDirection.Y / palmDirection.Z;
-            return palmDirection.Z < 0 && -1 < palmDirectionTan && palmDirectionTan < 1;
+            var d = h.PalmDirection;
+            var dTan = d.Y / d.Z;
+            return d.Z < 0 && -1 < dTan && dTan < 1;
         }
     }
 }

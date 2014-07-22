@@ -8,6 +8,8 @@ namespace NatureUnison
     public class FingerGesture
     {
         const double MaxPinchDistance = 200;
+        const int DefaultPushDepth = 100;
+        const double PushReboundRate = 0.8;
 
         public event Action<HandFrame?, double?> TwoFingersDistance = (f, d) => { };
         public event Action<HandFrame?, bool> PinchReported = (f, b) => { };
@@ -17,8 +19,37 @@ namespace NatureUnison
         public event Action<HandFrame?, Vector3D> Dragged = (f, v) => { };
         public event Action<HandFrame?, Vector3D?> Dropped = (f, v) => { };
 
+        public event Action<HandFrame?, bool> HoldUpReported = (f, b) => { };
+        public event Action<HandFrame?, bool> HoldUpChanged = (f, b) => { };
+
+        public event Action<HandFrame?> PushStarted = f => { };
+        public event Action<HandFrame?, double> PushProgress = (f, v) => { };
+        public event Action<HandFrame?> Pushed = f => { };
+        public event Action<HandFrame?> PushCancelled = f => { };
+
+        int pushDepth;
+
+        /// <summary>
+        /// Gets or sets the depth to push down to raise the <see cref="Pushed"/> event.
+        /// </summary>
+        /// <value>The depth to push down to raise the <see cref="Pushed"/> event.</value>
+        public int PushDepth
+        {
+            get { return pushDepth; }
+            set
+            {
+                if (value <= 0) throw new ArgumentOutOfRangeException("value", value, "The value must be positive.");
+                pushDepth = value;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FingerGesture"/> class.
+        /// </summary>
         public FingerGesture()
         {
+            PushDepth = DefaultPushDepth;
+
             HandsContext.Current.SingleHandFrame += f =>
             {
                 if (!f.HasValue)
@@ -86,6 +117,11 @@ namespace NatureUnison
                     }
                 }
             };
+
+            HandsContext.Current.SingleHandFrame += f =>
+            {
+                HoldUpReported(f, f.HasValue && IsFingerUpward(f.Value) && IsPalmForward(f.Value));
+            };
         }
 
         static readonly Func<double?, PinchDistanceState> ToPinchDistanceState = d =>
@@ -98,6 +134,22 @@ namespace NatureUnison
             Unknown,
             InRange,
             OutOfRange,
+        }
+
+        static bool IsFingerUpward(HandFrame h)
+        {
+            if (!h.FrontmostFinger.HasValue) return false;
+
+            // Map to plane x = 0 and determine if being in (180, 270) in degrees on y-z system.
+            var d = h.FrontmostFinger.Value.Direction;
+            return d.Y < 0 && d.Z < 0;
+        }
+
+        static bool IsPalmForward(HandFrame h)
+        {
+            // Map to plane x = 0 and determine if being in (270, 360) in degrees on y-z system.
+            var d = h.PalmDirection;
+            return d.Y > 0 && d.Z < 0;
         }
     }
 }
