@@ -18,7 +18,7 @@ namespace NatureUnison
         public event Action<HandFrame?, Vector3D?> Dropped = (f, v) => { };
 
         public event Action<HandFrame?, bool> HoldUpReported = (f, b) => { };
-        //public event Action<HandFrame?, bool> HoldUpChanged = (f, b) => { };
+        public event Action<HandFrame?, bool> HoldUpChanged = (f, b) => { };
 
         public event Action<HandFrame?> PushStarted = f => { };
         public event Action<HandFrame?, double> PushProgress = (f, v) => { };
@@ -89,6 +89,17 @@ namespace NatureUnison
             HandsContext.Current.SingleHandFrame += f =>
             {
                 HoldUpReported(f, f.HasValue && IsHandUpward(f.Value) && IsPalmForward(f.Value));
+            };
+
+            var isHeldUp = new ShortValueHistory<bool>(false);
+            HoldUpReported += (f, b) =>
+            {
+                isHeldUp.UpdateValue(b);
+
+                if (isHeldUp.Previous != isHeldUp.Current)
+                {
+                    HoldUpChanged(f, b);
+                }
             };
         }
 
