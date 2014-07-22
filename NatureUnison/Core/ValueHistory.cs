@@ -14,7 +14,7 @@ namespace NatureUnison
 
         public ValueHistory(int maxLength)
         {
-            if (maxLength <= 0) throw new ArgumentOutOfRangeException("maxLength", maxLength, "The value must be larger than 0.");
+            if (maxLength <= 0) throw new ArgumentOutOfRangeException("maxLength", maxLength, "The value must be positive.");
 
             MaxLength = maxLength;
             History = new Queue<T>(maxLength);
