@@ -5,11 +5,12 @@ using System.Linq;
 
 namespace ConsoleAppTest
 {
-    static class FingerGestureTest
+    class FingerGestureTest
     {
-        public static void DistanceTest()
+        FingerGesture gesture = new FingerGesture();
+
+        public void DistanceTest()
         {
-            var gesture = new FingerGesture();
             gesture.TwoFingersDistance += (f, d) =>
             {
                 if (d.HasValue)
@@ -19,9 +20,8 @@ namespace ConsoleAppTest
             };
         }
 
-        public static void PinchReportedTest()
+        public void PinchReportedTest()
         {
-            var gesture = new FingerGesture();
             gesture.PinchReported += (f, b) =>
             {
                 if (b)
@@ -31,9 +31,8 @@ namespace ConsoleAppTest
             };
         }
 
-        public static void DragTest()
+        public void DragTest()
         {
-            var gesture = new FingerGesture();
             gesture.DragStarted += f =>
             {
                 Console.WriteLine("Finger Drag Started");

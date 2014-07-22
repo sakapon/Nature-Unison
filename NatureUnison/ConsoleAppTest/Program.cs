@@ -12,9 +12,10 @@ namespace ConsoleAppTest
     {
         static void Main(string[] args)
         {
-            //FingerGestureTest.DragTest();
-            //HandGestureTest.DragTest();
-            HandGestureTest.PushTest();
+            //var test = new FingerGestureTest();
+            var test = new HandGestureTest();
+            test.DragTest();
+            test.PushTest();
 
             HandsContext.Current.AddTracker(new LeapHandsTracker());
 

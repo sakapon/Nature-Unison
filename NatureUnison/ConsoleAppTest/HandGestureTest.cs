@@ -5,11 +5,12 @@ using System.Linq;
 
 namespace ConsoleAppTest
 {
-    static class HandGestureTest
+    class HandGestureTest
     {
-        public static void GripReportedTest()
+        HandGesture gesture = new HandGesture();
+
+        public void GripReportedTest()
         {
-            var gesture = new HandGesture();
             gesture.GripReported += (f, b) =>
             {
                 if (b)
@@ -19,9 +20,8 @@ namespace ConsoleAppTest
             };
         }
 
-        public static void DragTest()
+        public void DragTest()
         {
-            var gesture = new HandGesture();
             gesture.DragStarted += f =>
             {
                 Console.WriteLine("Hand Drag Started");
@@ -37,9 +37,8 @@ namespace ConsoleAppTest
             };
         }
 
-        public static void HoldUpReportedTest()
+        public void HoldUpReportedTest()
         {
-            var gesture = new HandGesture();
             gesture.HoldUpReported += (f, b) =>
             {
                 if (b)
@@ -49,18 +48,16 @@ namespace ConsoleAppTest
             };
         }
 
-        public static void HoldUpChangedTest()
+        public void HoldUpChangedTest()
         {
-            var gesture = new HandGesture();
             gesture.HoldUpChanged += (f, b) =>
             {
                 Console.WriteLine(b ? "Hold Up Started" : "Hold Up Ended");
             };
         }
 
-        public static void PushTest()
+        public void PushTest()
         {
-            var gesture = new HandGesture();
             gesture.PushStarted += f =>
             {
                 Console.WriteLine("Hand Push Started");
