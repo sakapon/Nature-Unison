@@ -8,7 +8,8 @@ namespace NatureUnison
     public class HandGesture
     {
         const int MaxFingersHistoryCount = 50;
-        const int DefaultPushDepth = 500;
+        const int DefaultPushDepth = 100;
+        const double PushReboundRate = 0.8;
 
         public event Action<HandFrame?, bool> GripReported = (f, b) => { };
         //public event Action<HandFrame?, bool> GripChanged = (f, b) => { };
@@ -92,6 +93,9 @@ namespace NatureUnison
             };
 
             var isHeldUp = new ShortValueHistory<bool>(false);
+            var isPushStarted = false;
+            var pushStartedFrame = default(HandFrame);
+            var pushProgress = 0.0;
             HoldUpReported += (f, b) =>
             {
                 isHeldUp.UpdateValue(b);
@@ -99,6 +103,56 @@ namespace NatureUnison
                 if (isHeldUp.Previous != isHeldUp.Current)
                 {
                     HoldUpChanged(f, b);
+                }
+
+                if (isHeldUp.Current)
+                {
+                    pushProgress = (pushStartedFrame.PalmPosition.Z - f.Value.PalmPosition.Z) / PushDepth;
+
+                    if (isPushStarted)
+                    {
+                        if (pushProgress < 0.0)
+                        {
+                            pushStartedFrame = f.Value;
+                            pushProgress = 0.0;
+                        }
+                        else if (pushProgress > 1.0)
+                        {
+                            pushProgress = 1.0;
+                        }
+
+                        PushProgress(f, pushProgress);
+                        if (pushProgress == 1.0)
+                        {
+                            isPushStarted = false;
+                            Pushed(f);
+                        }
+                    }
+                    else
+                    {
+                        if (pushProgress < PushReboundRate)
+                        {
+                            isPushStarted = true;
+                            pushStartedFrame = f.Value;
+                            PushStarted(f);
+                        }
+                    }
+                }
+            };
+
+            HoldUpChanged += (f, b) =>
+            {
+                if (b)
+                {
+                    isPushStarted = true;
+                    pushStartedFrame = f.Value;
+                    PushStarted(f);
+                }
+                else if (isPushStarted)
+                {
+                    isPushStarted = false;
+                    pushProgress = 0.0;
+                    PushCancelled(f);
                 }
             };
         }
