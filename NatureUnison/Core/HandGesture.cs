@@ -133,8 +133,11 @@ namespace NatureUnison
                         if (pushProgress < PushReboundRate)
                         {
                             isPushStarted = true;
-                            pushStartedFrame = f.Value;
                             PushStarted(f);
+                        }
+                        else if (pushProgress > 1.0)
+                        {
+                            pushStartedFrame.PalmPosition.Z = f.Value.PalmPosition.Z + PushDepth;
                         }
                     }
                 }
