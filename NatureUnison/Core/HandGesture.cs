@@ -28,6 +28,10 @@ namespace NatureUnison
 
         int pushDepth;
 
+        /// <summary>
+        /// Gets or sets the depth to push down to raise the <see cref="Pushed"/> event.
+        /// </summary>
+        /// <value>The depth to push down to raise the <see cref="Pushed"/> event.</value>
         public int PushDepth
         {
             get { return pushDepth; }
@@ -38,6 +42,9 @@ namespace NatureUnison
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HandGesture"/> class.
+        /// </summary>
         public HandGesture()
         {
             PushDepth = DefaultPushDepth;
