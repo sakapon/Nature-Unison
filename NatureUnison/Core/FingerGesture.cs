@@ -122,6 +122,73 @@ namespace NatureUnison
             {
                 HoldUpReported(f, f.HasValue && IsFingerUpward(f.Value) && IsPalmForward(f.Value));
             };
+
+            var isHeldUp = new ShortValueHistory<bool>(false);
+            var isPushStarted = false;
+            var pushStartedFrame = default(HandFrame);
+            var pushProgress = 0.0;
+            HoldUpReported += (f, b) =>
+            {
+                isHeldUp.UpdateValue(b);
+
+                if (isHeldUp.Previous != isHeldUp.Current)
+                {
+                    HoldUpChanged(f, b);
+                }
+
+                if (isHeldUp.Current)
+                {
+                    pushProgress = (pushStartedFrame.PalmPosition.Z - f.Value.PalmPosition.Z) / PushDepth;
+
+                    if (isPushStarted)
+                    {
+                        if (pushProgress < 0.0)
+                        {
+                            pushStartedFrame = f.Value;
+                            pushProgress = 0.0;
+                        }
+                        else if (pushProgress > 1.0)
+                        {
+                            pushProgress = 1.0;
+                        }
+
+                        PushProgress(f, pushProgress);
+                        if (pushProgress == 1.0)
+                        {
+                            isPushStarted = false;
+                            Pushed(f);
+                        }
+                    }
+                    else
+                    {
+                        if (pushProgress < PushReboundRate)
+                        {
+                            isPushStarted = true;
+                            PushStarted(f);
+                        }
+                        else if (pushProgress > 1.0)
+                        {
+                            pushStartedFrame.PalmPosition.Z = f.Value.PalmPosition.Z + PushDepth;
+                        }
+                    }
+                }
+            };
+
+            HoldUpChanged += (f, b) =>
+            {
+                if (b)
+                {
+                    isPushStarted = true;
+                    pushStartedFrame = f.Value;
+                    PushStarted(f);
+                }
+                else if (isPushStarted)
+                {
+                    isPushStarted = false;
+                    pushProgress = 0.0;
+                    PushCancelled(f);
+                }
+            };
         }
 
         static readonly Func<double?, PinchDistanceState> ToPinchDistanceState = d =>
