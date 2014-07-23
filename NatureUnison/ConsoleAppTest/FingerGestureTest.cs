@@ -47,5 +47,44 @@ namespace ConsoleAppTest
                 Console.WriteLine("Finger Dropped");
             };
         }
+
+        public void HoldUpReportedTest()
+        {
+            gesture.HoldUpReported += (f, b) =>
+            {
+                if (b)
+                {
+                    Console.WriteLine("Held up {0:HH:mm:ss.fff}", DateTime.Now);
+                }
+            };
+        }
+
+        public void HoldUpChangedTest()
+        {
+            gesture.HoldUpChanged += (f, b) =>
+            {
+                Console.WriteLine(b ? "Hold Up Started" : "Hold Up Ended");
+            };
+        }
+
+        public void PushTest()
+        {
+            gesture.PushStarted += f =>
+            {
+                Console.WriteLine("Finger Push Started");
+            };
+            gesture.PushProgress += (f, v) =>
+            {
+                Console.WriteLine(v);
+            };
+            gesture.Pushed += f =>
+            {
+                Console.WriteLine("Finger Pushed");
+            };
+            gesture.PushCancelled += f =>
+            {
+                Console.WriteLine("Finger Push Cancelled");
+            };
+        }
     }
 }
