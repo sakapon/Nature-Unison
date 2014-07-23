@@ -55,11 +55,12 @@ namespace NatureUnison
             {
                 fingersCount.UpdateValue(f.HasValue ? (int?)f.Value.Fingers.Length : null);
 
-                if (fingersCount.History.Last() != 0)
+                var currentFingersCount = fingersCount.History.Last();
+                if (!currentFingersCount.HasValue || currentFingersCount > 1)
                 {
                     isGripped = false;
                 }
-                else if (!isGripped && fingersCount.History.Reverse().TakeWhile(i => i.HasValue).Contains(5))
+                else if (!isGripped && fingersCount.History.Reverse().TakeWhile(i => i.HasValue).Any(i => i >= 4))
                 {
                     isGripped = true;
                 }
