@@ -136,6 +136,8 @@ namespace NatureUnison
                     HoldUpChanged(f, b);
                 }
 
+                if (isPinched) return;
+
                 if (isHeldUp.Current)
                 {
                     pushProgress = (pushStartedFrame.FrontmostFinger.Value.TipPosition.Z - f.Value.FrontmostFinger.Value.TipPosition.Z) / PushDepth;
@@ -178,13 +180,13 @@ namespace NatureUnison
 
             HoldUpChanged += (f, b) =>
             {
-                if (b)
+                if (b && !isPinched)
                 {
                     isPushStarted = true;
                     pushStartedFrame = f.Value;
                     PushStarted(f);
                 }
-                else if (isPushStarted)
+                else if (!b && isPushStarted)
                 {
                     isPushStarted = false;
                     pushProgress = 0.0;
