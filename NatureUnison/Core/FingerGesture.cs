@@ -138,7 +138,7 @@ namespace NatureUnison
 
                 if (isHeldUp.Current)
                 {
-                    pushProgress = (pushStartedFrame.PalmPosition.Z - f.Value.PalmPosition.Z) / PushDepth;
+                    pushProgress = (pushStartedFrame.FrontmostFinger.Value.TipPosition.Z - f.Value.FrontmostFinger.Value.TipPosition.Z) / PushDepth;
 
                     if (isPushStarted)
                     {
@@ -168,7 +168,9 @@ namespace NatureUnison
                         }
                         else if (pushProgress > 1.0)
                         {
-                            pushStartedFrame.PalmPosition.Z = f.Value.PalmPosition.Z + PushDepth;
+                            var finger = pushStartedFrame.FrontmostFinger.Value;
+                            finger.TipPosition.Z = f.Value.FrontmostFinger.Value.TipPosition.Z + PushDepth;
+                            pushStartedFrame.FrontmostFinger = finger;
                         }
                     }
                 }
@@ -207,16 +209,18 @@ namespace NatureUnison
         {
             if (!h.FrontmostFinger.HasValue) return false;
 
-            // Map to plane x = 0 and determine if being in (180, 270) in degrees on y-z system.
+            // Map to plane x = 0 and determine if being in (180, 315) in degrees on y-z system.
             var d = h.FrontmostFinger.Value.Direction;
-            return d.Y < 0 && d.Z < 0;
+            var dAtan = Math.Atan2(d.Z, d.Y);
+            return -Math.PI < dAtan && dAtan < -Math.PI / 4;
         }
 
         static bool IsPalmForward(HandFrame h)
         {
-            // Map to plane x = 0 and determine if being in (270, 360) in degrees on y-z system.
+            // Map to plane x = 0 and determine if being in (270, 45) in degrees on y-z system.
             var d = h.PalmDirection;
-            return d.Y > 0 && d.Z < 0;
+            var dAtan = Math.Atan2(d.Z, d.Y);
+            return -Math.PI / 2 < dAtan && dAtan < Math.PI / 4;
         }
     }
 }
