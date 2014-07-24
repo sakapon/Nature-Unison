@@ -60,7 +60,7 @@ namespace NatureUnison
 
                 var frontFingers = f.Value.Fingers
                     .Where(_f => !double.IsNaN(_f.TipPosition.Z))
-                    .OrderByDescending(_f => _f.TipPosition.Z)
+                    .OrderBy(_f => _f.TipPosition.Z)
                     .Take(2)
                     .ToArray();
                 if (frontFingers.Length != 2)
