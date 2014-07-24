@@ -32,11 +32,8 @@ namespace ConsoleAppTest
             };
             gesture.Dropped += (f, v) =>
             {
-                Console.WriteLine("Hand Dropped {0}", v);
-            };
-            gesture.DragCancelled += f =>
-            {
-                Console.WriteLine("Hand Drag Cancelled");
+                Console.WriteLine(v.HasValue ? v.Value.ToString() : "Not Tracked");
+                Console.WriteLine("Hand Dropped");
             };
         }
 
