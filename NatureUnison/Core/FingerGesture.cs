@@ -18,6 +18,7 @@ namespace NatureUnison
         public event Action<HandFrame?> DragStarted = f => { };
         public event Action<HandFrame?, Vector3D> Dragged = (f, v) => { };
         public event Action<HandFrame?, Vector3D?> Dropped = (f, v) => { };
+        public event Action<HandFrame?> DragCancelled = f => { };
 
         public event Action<HandFrame?, bool> HoldUpReported = (f, b) => { };
         public event Action<HandFrame?, bool> HoldUpChanged = (f, b) => { };
@@ -105,7 +106,14 @@ namespace NatureUnison
                     }
                     else
                     {
-                        Dropped(f, f.HasValue ? f.Value.PalmPosition - dragStartedFrame.PalmPosition : default(Vector3D?));
+                        if (f.HasValue)
+                        {
+                            Dropped(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition);
+                        }
+                        else
+                        {
+                            DragCancelled(f);
+                        }
                     }
                 }
                 else
