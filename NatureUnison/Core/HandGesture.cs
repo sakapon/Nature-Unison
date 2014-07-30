@@ -10,13 +10,15 @@ namespace NatureUnison
         const int MaxFingersHistoryCount = 50;
         const int DefaultPushDepth = 100;
         const double PushReboundRate = 0.8;
+        const double DefaultMaxInertialVelocity = 1000;
+        const double DefaultMinInertialVelocity = 100;
 
         public event Action<HandFrame?, bool> GripReported = (f, b) => { };
         //public event Action<HandFrame?, bool> GripChanged = (f, b) => { };
 
         public event Action<HandFrame?> DragStarted = f => { };
-        public event Action<HandFrame?, Vector3D> Dragged = (f, v) => { };
-        public event Action<HandFrame?, Vector3D?> Dropped = (f, v) => { };
+        public event Action<HandFrame?, Vector3D> Dragged = (f, d) => { };
+        public event Action<HandFrame?, Vector3D, Vector3D?> Dropped = (f, d, v) => { };
         public event Action<HandFrame?> DragCancelled = f => { };
 
         public event Action<HandFrame?, bool> HoldUpReported = (f, b) => { };
@@ -43,12 +45,46 @@ namespace NatureUnison
             }
         }
 
+        double _MaxInertialVelocity;
+
+        /// <summary>
+        /// Gets or sets the upper bound of inertial velocity when the <see cref="Dropped"/> event occurs.
+        /// </summary>
+        /// <value>The upper bound of inertial velocity when the <see cref="Dropped"/> event occurs.</value>
+        public double MaxInertialVelocity
+        {
+            get { return _MaxInertialVelocity; }
+            set
+            {
+                if (value <= 0) throw new ArgumentOutOfRangeException("value", value, "The value must be positive.");
+                _MaxInertialVelocity = value;
+            }
+        }
+
+        double _MinInertialVelocity;
+
+        /// <summary>
+        /// Gets or sets the lower bound of inertial velocity when the <see cref="Dropped"/> event occurs.
+        /// </summary>
+        /// <value>The lower bound of inertial velocity when the <see cref="Dropped"/> event occurs.</value>
+        public double MinInertialVelocity
+        {
+            get { return _MinInertialVelocity; }
+            set
+            {
+                if (value <= 0) throw new ArgumentOutOfRangeException("value", value, "The value must be positive.");
+                _MinInertialVelocity = value;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HandGesture"/> class.
         /// </summary>
         public HandGesture()
         {
             PushDepth = DefaultPushDepth;
+            MaxInertialVelocity = DefaultMaxInertialVelocity;
+            MinInertialVelocity = DefaultMinInertialVelocity;
 
             var fingersCount = new ValueHistory<int?>(MaxFingersHistoryCount);
             var isGripped = false;
@@ -85,7 +121,7 @@ namespace NatureUnison
                     {
                         if (f.HasValue)
                         {
-                            Dropped(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition);
+                            Dropped(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition, null);
                         }
                         else
                         {

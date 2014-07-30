@@ -26,13 +26,13 @@ namespace ConsoleAppTest
             {
                 Console.WriteLine("Hand Drag Started");
             };
-            gesture.Dragged += (f, v) =>
+            gesture.Dragged += (f, d) =>
             {
-                Console.WriteLine(v);
+                Console.WriteLine(d);
             };
-            gesture.Dropped += (f, v) =>
+            gesture.Dropped += (f, d, v) =>
             {
-                Console.WriteLine("Hand Dropped {0}", v);
+                Console.WriteLine("Hand Dropped {0}", d);
             };
             gesture.DragCancelled += f =>
             {
