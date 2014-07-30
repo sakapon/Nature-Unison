@@ -27,7 +27,7 @@ namespace NatureUnison
         public event Action<HandFrame?> Pushed = f => { };
         public event Action<HandFrame?> PushCancelled = f => { };
 
-        int pushDepth;
+        int _PushDepth;
 
         /// <summary>
         /// Gets or sets the depth to push down to raise the <see cref="Pushed"/> event.
@@ -35,11 +35,11 @@ namespace NatureUnison
         /// <value>The depth to push down to raise the <see cref="Pushed"/> event.</value>
         public int PushDepth
         {
-            get { return pushDepth; }
+            get { return _PushDepth; }
             set
             {
                 if (value <= 0) throw new ArgumentOutOfRangeException("value", value, "The value must be positive.");
-                pushDepth = value;
+                _PushDepth = value;
             }
         }
 
