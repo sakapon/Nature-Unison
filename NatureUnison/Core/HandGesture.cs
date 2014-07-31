@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Media3D;
+using PalmFrame = System.Tuple<System.DateTime, System.Windows.Media.Media3D.Point3D>;
 
 namespace NatureUnison
 {
     public class HandGesture
     {
         const int MaxFingersHistoryCount = 50;
+        const int MaxGrippedPalmHistoryCount = 3;
         const int DefaultPushDepth = 100;
         const double PushReboundRate = 0.8;
-        const double DefaultMaxInertialVelocity = 1000;
-        const double DefaultMinInertialVelocity = 100;
+        const double DefaultMaxInertialVelocity = 4000;
+        const double DefaultMinInertialVelocity = 2000;
 
         public event Action<HandFrame?, bool> GripReported = (f, b) => { };
         //public event Action<HandFrame?, bool> GripChanged = (f, b) => { };
@@ -107,6 +109,7 @@ namespace NatureUnison
 
             var dragStartedFrame = default(HandFrame);
             var isGripped2 = new ShortValueHistory<bool>(false);
+            var grippedPalmHistory = new ValueHistory<PalmFrame>(MaxGrippedPalmHistoryCount);
             GripReported += (f, b) =>
             {
                 isGripped2.UpdateValue(b);
@@ -115,13 +118,14 @@ namespace NatureUnison
                 {
                     if (isGripped2.Current)
                     {
+                        grippedPalmHistory.UpdateValue(Tuple.Create(DateTime.Now, f.Value.PalmPosition));
                         Dragged(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition);
                     }
                     else
                     {
                         if (f.HasValue)
                         {
-                            Dropped(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition, null);
+                            Dropped(f, f.Value.PalmPosition - dragStartedFrame.PalmPosition, ToInertialVelocity(grippedPalmHistory));
                         }
                         else
                         {
@@ -226,6 +230,20 @@ namespace NatureUnison
             var d = h.PalmDirection;
             var dTan = d.Y / d.Z;
             return d.Z < 0 && -1 < dTan && dTan < 1;
+        }
+
+        Vector3D? ToInertialVelocity(ValueHistory<PalmFrame> palmHistory)
+        {
+            if (!palmHistory.IsFull) return null;
+
+            var firstFrame = palmHistory.History.First();
+            var lastFrame = palmHistory.History.Last();
+
+            var v = (lastFrame.Item2 - firstFrame.Item2) / (lastFrame.Item1 - firstFrame.Item1).TotalSeconds;
+            return
+                v.Length < MinInertialVelocity ? default(Vector3D?) :
+                v.Length <= MaxInertialVelocity ? v :
+                MaxInertialVelocity * v / v.Length;
         }
     }
 }

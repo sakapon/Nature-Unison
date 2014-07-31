@@ -33,6 +33,11 @@ namespace ConsoleAppTest
             gesture.Dropped += (f, d, v) =>
             {
                 Console.WriteLine("Hand Dropped {0}", d);
+                if (v.HasValue)
+                {
+                    Console.WriteLine("Inertial Velocity {0}", v);
+                    Console.WriteLine("Inertial Velocity Norm {0}", v.Value.Length);
+                }
             };
             gesture.DragCancelled += f =>
             {
