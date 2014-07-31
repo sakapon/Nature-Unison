@@ -37,13 +37,18 @@ namespace ConsoleAppTest
             {
                 Console.WriteLine("Finger Drag Started");
             };
-            gesture.Dragged += (f, v) =>
+            gesture.Dragged += (f, d) =>
             {
-                Console.WriteLine(v);
+                Console.WriteLine(d);
             };
-            gesture.Dropped += (f, v) =>
+            gesture.Dropped += (f, d, v) =>
             {
-                Console.WriteLine("Finger Dropped {0}", v);
+                Console.WriteLine("Finger Dropped {0}", d);
+                if (v.HasValue)
+                {
+                    Console.WriteLine("Inertial Velocity {0}", v);
+                    Console.WriteLine("Inertial Velocity Norm {0}", v.Value.Length);
+                }
             };
             gesture.DragCancelled += f =>
             {

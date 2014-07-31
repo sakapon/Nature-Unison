@@ -50,9 +50,9 @@ namespace NatureUnison
         double _MaxInertialVelocity;
 
         /// <summary>
-        /// Gets or sets the upper bound of inertial velocity when the <see cref="Dropped"/> event occurs.
+        /// Gets or sets the upper bound of inertial velocity of the hand when the <see cref="Dropped"/> event occurs.
         /// </summary>
-        /// <value>The upper bound of inertial velocity when the <see cref="Dropped"/> event occurs.</value>
+        /// <value>The upper bound of inertial velocity of the hand when the <see cref="Dropped"/> event occurs.</value>
         public double MaxInertialVelocity
         {
             get { return _MaxInertialVelocity; }
@@ -66,9 +66,9 @@ namespace NatureUnison
         double _MinInertialVelocity;
 
         /// <summary>
-        /// Gets or sets the lower bound of inertial velocity when the <see cref="Dropped"/> event occurs.
+        /// Gets or sets the lower bound of inertial velocity of the hand when the <see cref="Dropped"/> event occurs.
         /// </summary>
-        /// <value>The lower bound of inertial velocity when the <see cref="Dropped"/> event occurs.</value>
+        /// <value>The lower bound of inertial velocity of the hand when the <see cref="Dropped"/> event occurs.</value>
         public double MinInertialVelocity
         {
             get { return _MinInertialVelocity; }
