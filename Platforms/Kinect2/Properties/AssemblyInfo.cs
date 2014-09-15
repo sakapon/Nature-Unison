@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Markup;
 
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
@@ -21,3 +22,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("b40fc5fa-672f-4cfd-a00e-802dafd58035")]
 
 [assembly: CLSCompliant(true)]
+[assembly: XmlnsDefinition("http://schemas.saka-pon.net/natureunison", "NatureUnison.Platforms.Kinect2")]
+[assembly: XmlnsPrefix("http://schemas.saka-pon.net/natureunison", "nu")]
