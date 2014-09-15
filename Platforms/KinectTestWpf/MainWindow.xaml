@@ -1,8 +1,35 @@
-﻿<Window x:Class="KinectTestWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+		xmlns:local="clr-namespace:KinectTestWpf" xmlns:nu="http://schemas.saka-pon.net/natureunison"
+		x:Class="KinectTestWpf.MainWindow"
+        Title="MainWindow" Height="800" Width="1200" FontSize="40">
+	<Window.Resources>
+		<local:VectorStringConverter x:Key="VectorStringConverter"/>
+	</Window.Resources>
+	<Window.DataContext>
+		<nu:SkeletonTracker/>
+	</Window.DataContext>
+	<Grid>
+		<Grid HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="380"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<TextBlock Text="Head Position:"/>
+			<TextBlock Text="Hand Position:" Grid.Row="1"/>
+			<TextBlock Text="Hand Direction:" Grid.Row="2"/>
+			<TextBlock Text="Hand Orientation:" Grid.Row="3"/>
+			<TextBlock Text="{Binding HeadPosition, Converter={StaticResource VectorStringConverter}, Mode=OneWay}" Grid.Column="1"/>
+			<TextBlock Text="{Binding HandPosition, Converter={StaticResource VectorStringConverter}, Mode=OneWay}" Grid.Row="1" Grid.Column="1"/>
+			<TextBlock Text="{Binding HandDirection, Converter={StaticResource VectorStringConverter}, Mode=OneWay}" Grid.Row="2" Grid.Column="1"/>
+			<TextBlock Text="{Binding HandOrientation, Converter={StaticResource VectorStringConverter}, Mode=OneWay}" Grid.Row="3" Grid.Column="1"/>
+		</Grid>
+	</Grid>
 </Window>
