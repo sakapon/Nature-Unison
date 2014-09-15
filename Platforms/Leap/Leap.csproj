@@ -47,6 +47,7 @@
     <Reference Include="LeapCSharp.NET4.0">
       <HintPath>..\Lib\LeapCSharp.NET4.0.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -55,12 +56,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="FrameListener.cs" />
+    <Compile Include="HandTracker.cs" />
     <Compile Include="LeapContext.cs" />
     <Compile Include="LeapHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

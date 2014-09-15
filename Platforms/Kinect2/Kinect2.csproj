@@ -44,6 +44,7 @@
     <Reference Include="KLibrary.ComponentModel">
       <HintPath>..\packages\KLibrary.ComponentModel.2.1.57.0\lib\net45\KLibrary.ComponentModel.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -52,6 +53,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Properties\SharedAssemblyInfo.cs">
