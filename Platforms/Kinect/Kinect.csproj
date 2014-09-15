@@ -44,6 +44,12 @@
     <Reference Include="KLibrary.ComponentModel">
       <HintPath>..\packages\KLibrary.ComponentModel.2.1.57.0\lib\net45\KLibrary.ComponentModel.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Kinect">
+      <HintPath>$(KINECTSDK10_DIR)Assemblies\Microsoft.Kinect.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Kinect.Toolkit">
+      <HintPath>$(KINECT_TOOLKIT_DIR)Assemblies\Microsoft.Kinect.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
