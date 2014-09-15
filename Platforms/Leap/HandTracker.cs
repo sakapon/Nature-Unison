@@ -11,6 +11,12 @@ namespace NatureUnison.Platforms.Leap
     {
         public LeapContext Context { get; private set; }
 
+        public Point3D? PalmPosition
+        {
+            get { return GetValue<Point3D?>(); }
+            private set { SetValue(value); }
+        }
+
         public Point3D? FingerTipPosition
         {
             get { return GetValue<Point3D?>(); }
@@ -51,6 +57,7 @@ namespace NatureUnison.Platforms.Leap
                 return;
             }
 
+            PalmPosition = hand.StabilizedPalmPosition.ToPoint3DOrNull();
             FingerTipPosition = p.StabilizedTipPosition.ToPoint3DOrNull();
             FingerDirection = p.Direction.ToVector3DOrNull();
             // TODO: FingerOrientation
@@ -58,6 +65,7 @@ namespace NatureUnison.Platforms.Leap
 
         void Clear()
         {
+            PalmPosition = null;
             FingerTipPosition = null;
             FingerDirection = null;
             FingerOrientation = null;
