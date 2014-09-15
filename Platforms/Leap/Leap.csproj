@@ -44,6 +44,9 @@
     <Reference Include="KLibrary.ComponentModel">
       <HintPath>..\packages\KLibrary.ComponentModel.2.1.57.0\lib\net45\KLibrary.ComponentModel.dll</HintPath>
     </Reference>
+    <Reference Include="LeapCSharp.NET4.0">
+      <HintPath>..\Lib\LeapCSharp.NET4.0.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -61,6 +64,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Lib\Leap.dll">
+      <Link>Leap.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Lib\LeapCSharp.dll">
+      <Link>LeapCSharp.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="NuGetPackup.exe" />
     <Content Include="Package.nuspec.xml" />
   </ItemGroup>

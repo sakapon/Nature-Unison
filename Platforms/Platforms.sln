@@ -29,6 +29,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinect2TestWpf", "Kinect2Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeapTestWpf", "LeapTestWpf\LeapTestWpf.csproj", "{2C84551C-5778-446D-81EA-CC0A0B8822E4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{2984F3E7-CB88-4E17-A602-FE156FD6D6A6}"
+	ProjectSection(SolutionItems) = preProject
+		Lib\Leap.dll = Lib\Leap.dll
+		Lib\LeapCSharp.dll = Lib\LeapCSharp.dll
+		Lib\LeapCSharp.NET4.0.dll = Lib\LeapCSharp.NET4.0.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
