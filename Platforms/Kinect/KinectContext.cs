@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinect2
+namespace NatureUnison.Platforms.Kinect
 {
-    public class Class1
+    public class KinectContext
     {
     }
 }

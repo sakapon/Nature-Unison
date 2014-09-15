@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Leap
+namespace NatureUnison.Platforms.Kinect2
 {
-    public class Class1
+    public class KinectContext
     {
     }
 }
