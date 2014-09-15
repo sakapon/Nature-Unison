@@ -8,7 +8,7 @@ namespace NatureUnison.Platforms.Kinect
     {
         public static Point3D ToPoint3D(this SkeletonPoint p)
         {
-            return new Point3D(p.X, p.Y, p.Z);
+            return new Point3D(1000 * p.X, 1000 * p.Y, 1000 * p.Z);
         }
 
         public static Quaternion ToQuaternion(this Vector4 v)
