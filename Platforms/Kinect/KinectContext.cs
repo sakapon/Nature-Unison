@@ -1,4 +1,6 @@
 ﻿using KLibrary.ComponentModel;
+using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +17,8 @@ namespace NatureUnison.Platforms.Kinect
             get { return current.Value; }
         }
 
+        public KinectSensorChooser SensorChooser { get; private set; }
+
         [DefaultValue(true)]
         public bool IsAutoDisposing
         {
@@ -22,13 +26,20 @@ namespace NatureUnison.Platforms.Kinect
             set { SetValue(value); }
         }
 
+        public event Action<SkeletonFrame> SkeletonFrameArrived;
+
         KinectContext()
         {
+            SensorChooser = new KinectSensorChooser();
+            SensorChooser.KinectChanged += SensorChooser_KinectChanged;
+
             AppDomain.CurrentDomain.ProcessExit += (o, e) =>
             {
                 if (IsAutoDisposing) Dispose();
             };
         }
+
+        #region IDisposable members
 
         ~KinectContext()
         {
@@ -45,10 +56,82 @@ namespace NatureUnison.Platforms.Kinect
         {
             try
             {
-                // TODO: 
+                if (SensorChooser.Status == ChooserStatus.SensorStarted)
+                {
+                    SensorChooser.Stop();
+                }
             }
             catch (Exception)
             {
+            }
+        }
+
+        #endregion
+
+        public void Start()
+        {
+            SensorChooser.Start();
+        }
+
+        void SensorChooser_KinectChanged(object sender, KinectChangedEventArgs e)
+        {
+            if (e.OldSensor != null)
+            {
+                try
+                {
+                    if (SkeletonFrameArrived != null)
+                    {
+                        e.OldSensor.SkeletonFrameReady -= Kinect_SkeletonFrameReady;
+                        e.OldSensor.SkeletonStream.Disable();
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
+                    // E.g.: sensor might be abruptly unplugged.
+                }
+            }
+
+            if (e.NewSensor != null)
+            {
+                try
+                {
+                    if (SkeletonFrameArrived != null)
+                    {
+                        e.NewSensor.SkeletonStream.Enable();
+
+                        try
+                        {
+                            e.NewSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
+                            e.NewSensor.SkeletonStream.EnableTrackingInNearRange = false;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // Non Kinect for Windows devices do not support Near mode, so reset back to default mode.
+                            e.NewSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
+                            e.NewSensor.SkeletonStream.EnableTrackingInNearRange = false;
+                        }
+
+                        e.NewSensor.SkeletonFrameReady += Kinect_SkeletonFrameReady;
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    // KinectSensor might enter an invalid state while enabling/disabling streams or stream features.
+                    // E.g.: sensor might be abruptly unplugged.
+                }
+            }
+        }
+
+        void Kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            var h = SkeletonFrameArrived;
+            if (h != null)
+            {
+                using (var frame = e.OpenSkeletonFrame())
+                {
+                    h(frame);
+                }
             }
         }
     }
