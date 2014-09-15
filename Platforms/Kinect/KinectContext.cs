@@ -26,7 +26,17 @@ namespace NatureUnison.Platforms.Kinect
             set { SetValue(value); }
         }
 
-        public event Action<SkeletonFrame> SkeletonFrameArrived;
+        event Action<SkeletonFrame> skeletonFrameArrived;
+        bool is_SkeletonFrameArrived_handled;
+        public event Action<SkeletonFrame> SkeletonFrameArrived
+        {
+            add
+            {
+                is_SkeletonFrameArrived_handled = true;
+                skeletonFrameArrived += value;
+            }
+            remove { skeletonFrameArrived -= value; }
+        }
 
         KinectContext()
         {
@@ -79,7 +89,7 @@ namespace NatureUnison.Platforms.Kinect
             {
                 try
                 {
-                    if (SkeletonFrameArrived != null)
+                    if (is_SkeletonFrameArrived_handled)
                     {
                         e.OldSensor.SkeletonFrameReady -= Kinect_SkeletonFrameReady;
                         e.OldSensor.SkeletonStream.Disable();
@@ -96,7 +106,7 @@ namespace NatureUnison.Platforms.Kinect
             {
                 try
                 {
-                    if (SkeletonFrameArrived != null)
+                    if (is_SkeletonFrameArrived_handled)
                     {
                         e.NewSensor.SkeletonStream.Enable();
 
@@ -125,7 +135,7 @@ namespace NatureUnison.Platforms.Kinect
 
         void Kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
-            var h = SkeletonFrameArrived;
+            var h = skeletonFrameArrived;
             if (h != null)
             {
                 using (var frame = e.OpenSkeletonFrame())
