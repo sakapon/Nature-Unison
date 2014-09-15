@@ -26,6 +26,18 @@ namespace NatureUnison.Platforms.Kinect
             set { SetValue(value); }
         }
 
+        public SkeletonTrackingMode SkeletonTrackingMode
+        {
+            get { return GetValue<SkeletonTrackingMode>(); }
+            set { SetValue(value); }
+        }
+
+        public bool IsSkeletonInNearRange
+        {
+            get { return GetValue<bool>(); }
+            set { SetValue(value); }
+        }
+
         event Action<SkeletonFrame> skeletonFrameArrived;
         bool is_SkeletonFrameArrived_handled;
         public event Action<SkeletonFrame> SkeletonFrameArrived
@@ -112,8 +124,8 @@ namespace NatureUnison.Platforms.Kinect
 
                         try
                         {
-                            e.NewSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
-                            e.NewSensor.SkeletonStream.EnableTrackingInNearRange = false;
+                            e.NewSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode;
+                            e.NewSensor.SkeletonStream.EnableTrackingInNearRange = IsSkeletonInNearRange;
                         }
                         catch (InvalidOperationException)
                         {
