@@ -24,19 +24,19 @@ namespace NatureUnison.Platforms.Kinect
             private set { SetValue(value); }
         }
 
-        public Point3D? HandPosition
+        public Point3D? HandRightPosition
         {
             get { return GetValue<Point3D?>(); }
             private set { SetValue(value); }
         }
 
-        public Vector3D? HandDirection
+        public Vector3D? HandRightDirection
         {
             get { return GetValue<Vector3D?>(); }
             private set { SetValue(value); }
         }
 
-        public Quaternion? HandOrientation
+        public Quaternion? HandRightOrientation
         {
             get { return GetValue<Quaternion?>(); }
             private set { SetValue(value); }
@@ -75,27 +75,31 @@ namespace NatureUnison.Platforms.Kinect
             var elbowRight = skeleton.Joints[JointType.ElbowRight];
 
             HeadPosition = head.TrackingState == JointTrackingState.Tracked ? head.Position.ToPoint3D() : default(Point3D?);
-            HandPosition = handRight.TrackingState == JointTrackingState.Tracked ? handRight.Position.ToPoint3D() : default(Point3D?);
+            HandRightPosition = handRight.TrackingState == JointTrackingState.Tracked ? handRight.Position.ToPoint3D() : default(Point3D?);
 
-            if (head.TrackingState == JointTrackingState.Tracked && handRight.TrackingState == JointTrackingState.Tracked)
+            if (handRight.TrackingState == JointTrackingState.Tracked && elbowRight.TrackingState == JointTrackingState.Tracked)
             {
-                var elbowPosition = elbowRight.Position.ToPoint3D();
-                var d = HandPosition.Value - elbowPosition;
+                var elbowRightPosition = elbowRight.Position.ToPoint3D();
+                var d = HandRightPosition.Value - elbowRightPosition;
                 d.Normalize();
-                HandDirection = d;
+                HandRightDirection = d;
+
+                var handRightOrientation = skeleton.BoneOrientations[JointType.HandRight];
+                HandRightOrientation = handRightOrientation.HierarchicalRotation.Quaternion.ToQuaternion();
             }
             else
             {
-                HandDirection = null;
+                HandRightDirection = null;
+                HandRightOrientation = null;
             }
         }
 
         void Clear()
         {
             HeadPosition = null;
-            HandPosition = null;
-            HandDirection = null;
-            HandOrientation = null;
+            HandRightPosition = null;
+            HandRightDirection = null;
+            HandRightOrientation = null;
         }
     }
 }

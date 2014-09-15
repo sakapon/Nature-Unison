@@ -23,6 +23,8 @@ namespace KinectTestWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += (o, e) => NatureUnison.Platforms.Kinect.KinectContext.Current.Start();
         }
     }
 }
